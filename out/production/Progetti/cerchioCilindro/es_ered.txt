@@ -1,0 +1,16 @@
+class Alfa {
+   public int numAlfa;
+}
+
+----------------------
+
+class Beta extends Alfa
+   public int numBeta;
+}
+
+----------------------
+
+Beta ogg = new Beta();
+
+ogg.numBeta = 57;
+ogg.numAlfa = 29;   // Ok
