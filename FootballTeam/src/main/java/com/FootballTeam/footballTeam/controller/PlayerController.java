@@ -50,7 +50,6 @@ public class PlayerController {
         );
     }
 
-
     // Endpoint per creare un Giocatore
     // Inserisco i dati del DTO su Player
     @PostMapping
@@ -146,14 +145,14 @@ public class PlayerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deletePlayer(@PathVariable Long id) {
         playerService.deletePlayer(id);
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // Endpoint per ottenere giocatori per ruolo (metodo GET)
     // ES. /api/players/byPosition?position=Attaccante
-    @GetMapping("/byPosition")
+    @GetMapping("/ByPosition")
     public ResponseEntity<List<PlayerResponseDto>> getPlayersByPosition(@RequestParam String position) {
-        List<Player> players = playerService.getPlayerbyPosition(position);
+        List<Player> players = playerService.getPlayerByPosition(position);
         List<PlayerResponseDto> playerDtos = players.stream()
                 .map(this:: convertToPlayerResponseDto)
                 .collect(Collectors.toList());
@@ -170,7 +169,7 @@ public class PlayerController {
         return new ResponseEntity<>(playerDtos, HttpStatus.OK); // 200 OK + Lista giocatori svincolati
     }
 
-    @GetMapping("/byNationality")
+    @GetMapping("/ByNationality")
     public ResponseEntity<List<PlayerResponseDto>> getPlayersByNationality(@RequestParam String nationality) {
         List<Player> players = playerService.getPlayersByNationality(nationality);
         List<PlayerResponseDto> playerDtos = players.stream()

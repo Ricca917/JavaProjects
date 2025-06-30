@@ -13,22 +13,21 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Anche questo Id viene gestito dal DB
     private Long id; // Campo creato per l'id
 
-    private String teamName;     // Campo nomeSquadra
-    private int foundingYear;    // Campo annoFondazione
-    private String president;    // Campo presidente
-    private String coach;        // Campo allenatore
+    private String teamName;
+    private int foundingYear;
+    private String president;
+    private String coach;
 
-    @OneToMany(mappedBy = "team", // "team" è il nome del campo della classe Player che gestisce la relazione
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
+    @OneToMany(mappedBy = "team",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.LAZY)
-    private List<Player> rosterPlayers = new ArrayList<>(); // Lista inizializzata
+    private List<Player> rosterPlayers = new ArrayList<>();
 
 
     // Costruttore vuoto per la JPA
     public Team() {}
 
-    //Costruttore base (no id, rosa inizializzata vuota)
+    //Costruttore base
     public Team(String teamName, int foundingYear, String president, String coach) {
         this.teamName = teamName;
         this.foundingYear = foundingYear;

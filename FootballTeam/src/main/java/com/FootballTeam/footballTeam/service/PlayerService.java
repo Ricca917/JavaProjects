@@ -55,13 +55,25 @@ public class PlayerService {
         playerRepository.deleteById(id);
     }
 
-    // Metodo per trovare giocatori per team Id (metodo usato nel Repository)
+    // Metodo per trovare giocatori per team Id
     public List<Player> getPlayerByTeamId(Long teamId) {
         return playerRepository.findByTeamId(teamId);
     }
 
     // Metodo per trovare giocatori per Ruolo
-    public List<Player> getPlayerbyPosition(String position) {
+    public List<Player> getPlayerByPosition(String position) {
         return playerRepository.findByPosition(position);
     }
+
+    // Metodo per trovare giocatori per Nazionalità
+    public List<Player> getPlayersByNationality(String nationality) {
+        return playerRepository.findByNationality(nationality);
+    }
+
+    // Metodo per trovare giocatori se hanno un team
+    public List<Player> getFreePlayers() {
+        return playerRepository.findByIsFreeAgentTrue();
+    }
+
 }
+

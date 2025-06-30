@@ -19,7 +19,7 @@ public class PlayerRequestDto {
     @NotNull(message = "La data di nascita non può essere nulla")
     private LocalDate dateOfBirth;
 
-    @NotNull(message = "Specificare se il giocatore è un agente libero")
+    @NotNull(message = "Specificare se il giocatore è libero")
     private Boolean isFreeAgent;
 
     @Min(value = 0, message = "L'età non può essere negativa")
@@ -76,7 +76,6 @@ public class PlayerRequestDto {
         this.lastName = lastName;
     }
 
-    // --- GETTER E SETTER AGGIUNTI PER I NUOVI CAMPI ---
     public String getNationality() {
         return nationality;
     }

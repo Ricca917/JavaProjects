@@ -9,7 +9,9 @@ import java.util.List;
 public interface PlayerRepository extends JpaRepository<Player, Long> {
     List<Player> findByTeamId(Long teamId); // Cerca Giocatore per Id
     List<Player> findByPosition(String position); // Cerca Giocatore per Posizione
-    List<Player> findByFistName(String firstName);
+    List<Player> findByFirstName(String firstName);
     List<Player> findByLastName(String lastName);
+    List<Player> findByNationality(String nationality);
+    List<Player> findByIsFreeAgentTrue();
     // Aggiungere metodi a piacimento!
 }
