@@ -1,7 +1,7 @@
 package com.FootballTeam.footballTeam.controller;
 
-import com.FootballTeam.footballTeam.dto.PlayerRequestDto;
-import com.FootballTeam.footballTeam.dto.PlayerResponseDto;
+import com.FootballTeam.footballTeam.dto.request.PlayerRequestDto;
+import com.FootballTeam.footballTeam.dto.response.PlayerResponseDto;
 import com.FootballTeam.footballTeam.model.Player;
 import com.FootballTeam.footballTeam.model.Team;
 import com.FootballTeam.footballTeam.service.PlayerService;

@@ -1,4 +1,4 @@
-package com.FootballTeam.footballTeam.dto;
+package com.FootballTeam.footballTeam.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
