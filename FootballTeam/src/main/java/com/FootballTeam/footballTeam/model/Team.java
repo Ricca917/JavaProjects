@@ -2,6 +2,8 @@ package com.FootballTeam.footballTeam.model;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 
 
@@ -15,7 +17,11 @@ public class Team {
 
     private String teamName;
     private int foundingYear;
+
+    @Column(nullable = false)
     private String president;
+
+    @Column(nullable = false)
     private String coach;
 
     @OneToMany(mappedBy = "team",
@@ -23,6 +29,9 @@ public class Team {
             fetch = FetchType.LAZY)
     private List<Player> rosterPlayers = new ArrayList<>();
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(name = "team_leagues", joinColumns = @JoinColumn(name = "team_id"), inverseJoinColumns = @JoinColumn(name = "league_id"))
+    private Set<League> leagues = new HashSet<>();
 
     // Costruttore vuoto per la JPA
     public Team() {}
@@ -82,8 +91,21 @@ public class Team {
         return rosterPlayers;
     }
 
-    public void setRosterPlayers(List<Player> rosterPlayers) {
-        this.rosterPlayers = rosterPlayers;
+    public Set<League> getLeagues() {
+        return leagues;
+    }
+
+    public void setRosterPlayers(List<Player> newRosterPlayers) {
+        if (this.rosterPlayers != null) {
+            for (Player player : new ArrayList<>(this.rosterPlayers)) {
+                removePlayer(player);
+            }
+        }
+        if (newRosterPlayers != null) {
+            for (Player player : newRosterPlayers) {
+                addPlayer(player);
+            }
+        }
     }
 
     // Metodo per aggiungere un giocatore alla squadra (helper per la coerenza bidirezionale)
@@ -98,6 +120,21 @@ public class Team {
     public void removePlayer(Player player) {
         if (player != null && this.rosterPlayers.remove(player)) {
             player.setTeam(null); // Scollega il giocatore dalla squadra
+        }
+    }
+
+    // Metodo per Aggiungere una Lega/Campionato
+    public void addLeague(League league) {
+        if (league != null && !this.leagues.contains(league)) {
+            this.leagues.add(league);
+            league.getTeams().add(this);
+        }
+    }
+
+    // Metodo per Rimuovere una Lega/Campionato
+    public void removeLeague(League league) {
+        if (league != null && this.leagues.remove(league)) {
+            league.getTeams().remove(this);
         }
     }
 

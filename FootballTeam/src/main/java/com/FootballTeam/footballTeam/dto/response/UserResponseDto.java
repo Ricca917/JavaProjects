@@ -1,4 +1,4 @@
-package com.FootballTeam.footballTeam.dto;
+package com.FootballTeam.footballTeam.dto.response;
 
 import com.FootballTeam.footballTeam.model.Role;
 

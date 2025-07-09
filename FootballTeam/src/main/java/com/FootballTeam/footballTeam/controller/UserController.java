@@ -1,13 +1,11 @@
 package com.FootballTeam.footballTeam.controller;
 
-import com.FootballTeam.footballTeam.dto.UserResponseDto;
-import com.FootballTeam.footballTeam.dto.TeamResponseDto;
+import com.FootballTeam.footballTeam.dto.response.UserResponseDto;
 import com.FootballTeam.footballTeam.dto.request.UserRequestDto;
 import com.FootballTeam.footballTeam.model.User;
 import com.FootballTeam.footballTeam.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

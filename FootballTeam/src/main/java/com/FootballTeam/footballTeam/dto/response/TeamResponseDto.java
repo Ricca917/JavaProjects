@@ -1,6 +1,5 @@
-package com.FootballTeam.footballTeam.dto;
+package com.FootballTeam.footballTeam.dto.response;
 
-import com.FootballTeam.footballTeam.dto.response.PlayerResponseDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
