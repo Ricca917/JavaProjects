@@ -1,71 +1,50 @@
 package com.FootballTeam.footballTeam.controller;
 
-import com.FootballTeam.footballTeam.dto.response.UserResponseDto;
 import com.FootballTeam.footballTeam.dto.request.UserRequestDto;
+import com.FootballTeam.footballTeam.model.Role;
 import com.FootballTeam.footballTeam.model.User;
-import com.FootballTeam.footballTeam.service.UserService;
-import jakarta.validation.Valid;
+import com.FootballTeam.footballTeam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserService userService;
+
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    // Endpoint per creare un nuovo utente
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto userRequestDto) {
-        User user = new User(userRequestDto.getUsername(), userRequestDto.getPassword(), userRequestDto.getRole());
-        User createdUser = userService.createUser(user);
-        return new ResponseEntity<>(converToUserResponseDto(createdUser), HttpStatus.CREATED);
-    }
+    public ResponseEntity<String> createUser(@RequestBody UserRequestDto userRequestDto) {
+        if (userRepository.existsByUsername(userRequestDto.getUsername())) {
+            return new ResponseEntity<>("Username already exists!", HttpStatus.BAD_REQUEST);
+        }
+        User user = new User();
+        user.setUsername(userRequestDto.getUsername());
+        user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
 
-    // Endpoint per ottenere tutti gli utenti
-    @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        List<UserResponseDto> userResponseDtos = users.stream()
-                .map(this::converToUserResponseDto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(userResponseDtos, HttpStatus.OK);
-    }
+        try {
+            Role assignedRole = Role.USER;
+            if (userRequestDto.getRole() != null) {
+                assignedRole = Role.valueOf(userRequestDto.getRole().toUpperCase());
+            }
+            user.setRole(assignedRole);
 
-    // Endpoint per ottenere un utente tramite ID
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id)
-                .orElseThrow(() -> new java.util.NoSuchElementException("Utente non trovato con ID:" + id));
-        return new ResponseEntity<>(converToUserResponseDto(user), HttpStatus.OK);
-    }
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>("Invalid role specified!", HttpStatus.BAD_REQUEST);
+        }
 
-    // Endpoint per aggiornare un utente esistente
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDto userRequestDto) {
-        User userDetails = new User(userRequestDto.getUsername(), userRequestDto.getPassword(),userRequestDto.getRole());
-        User updatedUser = userService.updateUser(id,userDetails);
-        return new ResponseEntity<>(converToUserResponseDto(updatedUser), HttpStatus.OK);
-    }
 
-    // Endpoint per eliminare un utente
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    // Metodo per convertire User in UserResponseDto
-    private UserResponseDto converToUserResponseDto(User user) {
-        return new UserResponseDto(user.getId(), user.getUsername(), user.getRole());
+        userRepository.save(user);
+        return new ResponseEntity<>("User created successfully!", HttpStatus.CREATED);
     }
 }

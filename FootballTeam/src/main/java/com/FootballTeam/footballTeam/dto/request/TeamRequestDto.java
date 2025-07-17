@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Min;
 
+import java.util.List;
 
 public class TeamRequestDto {
 
@@ -24,11 +25,24 @@ public class TeamRequestDto {
     @Size(min = 2, max = 50, message = "Il nome dell'allenatore deve essere tra 2 e 50 caratteri")
     private String coach;
 
+    // Associazione Team - Leagues(Campionati/coppe)
+    private List<Long> leagueIds;
+
     // Costruttore base
     public TeamRequestDto() {
 
     }
 
+    // Costruttore con Attributi
+    public TeamRequestDto(String teamName, Integer foundingYear, String president, String coach, List<Long> leagueIds) {
+        this.teamName = teamName;
+        this.foundingYear = foundingYear;
+        this.president = president;
+        this.coach = coach;
+        this.leagueIds = leagueIds;
+    }
+
+    // Getter e Setter
     public String getTeamName() {
         return teamName;
     }
@@ -45,6 +59,10 @@ public class TeamRequestDto {
         return coach;
     }
 
+    public List<Long> getLeagueIds() {
+        return leagueIds;
+    }
+
     public void setTeamName(String teamName) {
         this.teamName = teamName;
     }
@@ -59,5 +77,9 @@ public class TeamRequestDto {
 
     public void setCoach(String coach) {
         this.coach = coach;
+    }
+
+    public void setLeagueIds(List<Long> leagueIds) {
+        this.leagueIds = leagueIds;
     }
 }

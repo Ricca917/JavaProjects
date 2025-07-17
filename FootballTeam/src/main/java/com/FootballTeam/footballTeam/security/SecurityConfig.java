@@ -2,55 +2,86 @@ package com.FootballTeam.footballTeam.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity; // IMPORTANTE!
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration // Definisco la classe come configurazione di Spring
-@EnableWebSecurity // Abilito Spring Security web
-@EnableMethodSecurity // Abilito la sicurezza usando @PreAuthorized
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
-    private final CustomUserDetailsService userDetailsService;
-    private final BCryptPasswordEncoder passwordEncoder;
 
-    // Costruttore per Iniezione
-    public SecurityConfig(CustomUserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder) {
+    private JwtAuthEntryPoint authEntryPoint;
+    private CustomUserDetailsService userDetailsService;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
+        this.authEntryPoint = authEntryPoint;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    // Configurazione della SecurityFilterChain, Definisco come Spring Security gestisce le richieste HTTP
-    // Permetto l'accesso senza autenticazione all endpoint "/api/auto/**"
-    // Per gli altri Endpoint è richiesta l'autorizzazione
-    // Le sessioni vengono rese STATELESS
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated()
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(authEntryPoint)
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(authorize -> authorize
+                        // Endpoint pubblici che non richiedono autenticazione (login e registrazione)
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/users").permitAll()
+
+                        // Endpoint per visualizzare (GET) giocatori e squadre - Accessibili a USER e ADMIN
+                        .requestMatchers(HttpMethod.GET, "/api/players/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/teams/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/leagues/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/contracts/**").hasAnyRole("USER", "ADMIN")
+
+                        // Endpoint per creazione, modifica, eliminazione - Accessibili SOLO ad ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/players").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/players/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/players/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/teams").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/teams/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/teams/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/leagues").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/leagues/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/leagues/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/contracts").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/contracts/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/contracts/**").hasRole("ADMIN")
+
+                        .anyRequest().authenticated()
                 );
+
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
-    // Configurazione dell Authentication Manager che gestirà l'autenticazione
-    // Utilizza CustomUserDetailService e il BCryptPasswordEncoder
     @Bean
-    public AuthenticationManager authenticationManager(CustomUserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder);
-        return new ProviderManager(authenticationProvider);
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

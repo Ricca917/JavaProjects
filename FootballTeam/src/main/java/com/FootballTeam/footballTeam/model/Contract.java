@@ -1,9 +1,7 @@
 package com.FootballTeam.footballTeam.model;
 
 import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.web.WebProperties;
-import org.springframework.cglib.core.Local;
-
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity // Definisco Contract come una entità
@@ -12,21 +10,22 @@ public class Contract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(name = "start_date", nullable = false) // Colonna del DB con la data di inizio dei contratti
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "end_date", nullable = false) // Colonna del DB con la data di fine dei contratti
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @Column(name = "salary") // Colonna del DB con il salario
-    private Double salary;
+    @Column(name = "salary", nullable = false, precision = 15, scale = 2)
+    private BigDecimal salary;
 
-    @Column(name = "provisions", columnDefinition = "TEXT") // Colonna del DB con le clausole del contratto
+    @Column(name = "provisions", columnDefinition = "TEXT")
     private String provisions;
 
-    @OneToOne(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "player_id", unique = true, nullable = false)
     private Player player;
 
     // Costruttore vuoto
@@ -34,57 +33,57 @@ public class Contract {
     }
 
     // Costruttore con Attributi
-    public Contract(LocalDate startDate, LocalDate endDate, Double salary, String provisions, Player player) {
+    public Contract(LocalDate startDate, LocalDate endDate, BigDecimal salary, String provisions, Player player) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.salary = salary;
         this.provisions = provisions;
+        this.player = player;
     }
 
     // Getter e Setter
-
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getStartDate() {
         return startDate;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public Double getSalary() {
-        return salary;
-    }
-
-    public String getProvisions() {
-        return provisions;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
-    public void setSalary(Double salary) {
+    public BigDecimal getSalary() {
+        return salary;
+    }
+
+    public void setSalary(BigDecimal salary) {
         this.salary = salary;
+    }
+
+    public String getProvisions() {
+        return provisions;
     }
 
     public void setProvisions(String provisions) {
         this.provisions = provisions;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public void setPlayer(Player player) {
@@ -100,6 +99,7 @@ public class Contract {
                 ", endDate=" + endDate +
                 ", salary=" + salary +
                 ", provisions='" + provisions + '\'' +
+                ", playerId=" + (player != null ? player.getId() : "null") +
                 '}';
     }
 }

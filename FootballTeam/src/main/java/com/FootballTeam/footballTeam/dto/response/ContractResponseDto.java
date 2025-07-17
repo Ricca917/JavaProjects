@@ -2,29 +2,26 @@ package com.FootballTeam.footballTeam.dto.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class ContractResponseDto {
-    private Long id;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private BigDecimal salary;
-    private Long playerId;
-    private String playerFirstName;
-    private String playerLastName;
-    private Long teamId;
-    private String teamName;
+    private final Long id; // Final per immutabilità
+    private final LocalDate startDate;
+    private final LocalDate endDate;
+    private final BigDecimal salary;
+    private final String provisions; // Aggiunto provisions qui, se lo vuoi nella risposta
+    private final Long playerId;
+    private final String playerFirstName;
+    private final String playerLastName;
+    private final Long teamId;
+    private final String teamName;
 
-    // Costruttore vuoto
-    public ContractResponseDto() {
-    }
-
-    // Costruttore con Attributi
-    public ContractResponseDto(Long id, LocalDate startDate, LocalDate endDate, BigDecimal salary, Long playerId, String playerFirstName, String playerLastName, Long teamId, String teamName) {
+    // Costruttore con gli attributi
+    public ContractResponseDto(Long id, LocalDate startDate, LocalDate endDate, BigDecimal salary, String provisions, Long playerId, String playerFirstName, String playerLastName, Long teamId, String teamName) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.salary = salary;
+        this.provisions = provisions;
         this.playerId = playerId;
         this.playerFirstName = playerFirstName;
         this.playerLastName = playerLastName;
@@ -32,8 +29,7 @@ public class ContractResponseDto {
         this.teamName = teamName;
     }
 
-    // Getter e Setter
-
+    // Getter
     public Long getId() {
         return id;
     }
@@ -48,6 +44,10 @@ public class ContractResponseDto {
 
     public BigDecimal getSalary() {
         return salary;
+    }
+
+    public String getProvisions() {
+        return provisions;
     }
 
     public Long getPlayerId() {
@@ -68,41 +68,5 @@ public class ContractResponseDto {
 
     public String getTeamName() {
         return teamName;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setSalary(BigDecimal salary) {
-        this.salary = salary;
-    }
-
-    public void setPlayerId(Long playerId) {
-        this.playerId = playerId;
-    }
-
-    public void setPlayerFirstName(String playerFirstName) {
-        this.playerFirstName = playerFirstName;
-    }
-
-    public void setPlayerLastName(String playerLastName) {
-        this.playerLastName = playerLastName;
-    }
-
-    public void setTeamId(Long teamId) {
-        this.teamId = teamId;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
     }
 }

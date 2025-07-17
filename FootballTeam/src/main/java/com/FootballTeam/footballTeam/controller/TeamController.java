@@ -1,23 +1,19 @@
 package com.FootballTeam.footballTeam.controller;
 
-import com.FootballTeam.footballTeam.dto.response.PlayerResponseDto;
-import com.FootballTeam.footballTeam.dto.response.TeamResponseDto;
 import com.FootballTeam.footballTeam.dto.request.TeamRequestDto;
-import com.FootballTeam.footballTeam.model.Team;
-import com.FootballTeam.footballTeam.model.Player;
+import com.FootballTeam.footballTeam.dto.response.TeamResponseDto;
 import com.FootballTeam.footballTeam.service.TeamService;
-import org.springframework.beans.factory.annotation.Autowired;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
-@RestController // Definisco la classe come REST Controller
-@RequestMapping("/api/teams")  // Percorso per le API relative alle Squadre
+@RestController
+@RequestMapping("/api/teams")
 public class TeamController {
     private final TeamService teamService;
 
@@ -26,148 +22,94 @@ public class TeamController {
         this.teamService = teamService;
     }
 
-    // Mappare Team a TeamResponseDto
-    private TeamResponseDto convertToTeamResponseDto(Team team) {
-        List<PlayerResponseDto> playerDtos = null;
-        if(team.getRosterPlayers() != null && !team.getRosterPlayers().isEmpty()) {
-            playerDtos = team.getRosterPlayers().stream()
-                    .map(player -> new PlayerResponseDto(
-                            player.getId(),
-                            player.getFirstName(),
-                            player.getLastName(),
-                            player.getPosition(),
-                            player.getDateOfBirth(),
-                            player.getNationality(),
-                            player.getIsFreeAgent(),
-                            player.getTeam() != null ? player.getTeam().getId() : null,
-                            player.getTeam() != null ? player.getTeam().getTeamName() : null,
-                            player.getAge(),
-                            player.getJerseyNumber(),
-                            player.getAppearances(),
-                            player.getGoals()
-                    ))
-                    .collect(Collectors.toList());
-        }
-        return new TeamResponseDto(
-                team.getId(),
-                team.getTeamName(),
-                team.getFoundingYear(),
-                team.getPresident(),
-                team.getCoach(),
-                playerDtos
-        );
-    }
-
-    // Mappo Player con PlayerResponseDto
-    private PlayerResponseDto convertToPlayerResponseDto(Player player) {
-        return new PlayerResponseDto(
-                player.getId(),
-                player.getFirstName(),
-                player.getLastName(),
-                player.getPosition(),
-                player.getDateOfBirth(),
-                player.getNationality(),
-                player.getIsFreeAgent(),
-                player.getTeam() != null ? player.getTeam().getId() : null,
-                player.getTeam() != null ? player.getTeam().getTeamName() : null,
-                player.getAge(),
-                player.getJerseyNumber(),
-                player.getAppearances(),
-                player.getGoals()
-        );
-    }
-
     // Endpoint per visualizzare tutte le Squadre
     @GetMapping
     public ResponseEntity<List<TeamResponseDto>> getAllTeams() {
-        List<Team> teams = teamService.getAllTeams();
-        List<TeamResponseDto> teamDtos = teams.stream()
-                .map(this::convertToTeamResponseDto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(teamDtos, HttpStatus.OK);
+        List<TeamResponseDto> teams = teamService.getAllTeams();
+        return new ResponseEntity<>(teams, HttpStatus.OK);
     }
 
     // Endpoint per la creazione di un nuovo Team (metodo POST)
     @PostMapping
     public ResponseEntity<TeamResponseDto> createTeam(@Valid @RequestBody TeamRequestDto teamDto) {
-        Team team = new Team();
-        team.setTeamName(teamDto.getTeamName());
-        team.setFoundingYear(teamDto.getFoundingYear());
-        team.setPresident(teamDto.getPresident());
-        team.setCoach(teamDto.getCoach());
-
-        Team savedTeam = teamService.saveTeam(team);
-        return new ResponseEntity<>(convertToTeamResponseDto(savedTeam), HttpStatus.CREATED);
+        TeamResponseDto savedTeamDto = teamService.createTeam(teamDto);
+        return new ResponseEntity<>(savedTeamDto, HttpStatus.CREATED);
     }
 
     // Endpoint per trovare Squadre da Id (metodo GET)
     @GetMapping("/{id}")
     public ResponseEntity<TeamResponseDto> getTeamById(@PathVariable Long id) {
-        Optional<Team> team = teamService.getTeamById(id);
-        return team.map(value -> new ResponseEntity<>(convertToTeamResponseDto(value), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        TeamResponseDto teamDto = teamService.getTeamById(id)
+                .orElseThrow(() -> new NoSuchElementException("Team not found with ID: " + id));
+        return new ResponseEntity<>(teamDto, HttpStatus.OK);
     }
 
     // Endpoint per aggiornare un team esistente (metodo PUT)
     @PutMapping("/{id}")
     public ResponseEntity<TeamResponseDto> updateTeam(@PathVariable Long id, @Valid @RequestBody TeamRequestDto teamDto) {
-        Optional<Team> teamOptional = teamService.getTeamById(id);
-
-        if (teamOptional.isPresent()) {
-            Team existingTeam = teamOptional.get();
-
-            existingTeam.setTeamName(teamDto.getTeamName());
-            existingTeam.setFoundingYear(teamDto.getFoundingYear());
-            existingTeam.setPresident(teamDto.getPresident());
-            existingTeam.setCoach(teamDto.getCoach());
-
-            Team updatedTeam = teamService.saveTeam(existingTeam);
-            return new ResponseEntity<>(convertToTeamResponseDto(updatedTeam), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        TeamResponseDto updatedTeamDto = teamService.updateTeam(id, teamDto);
+        return new ResponseEntity<>(updatedTeamDto, HttpStatus.OK);
     }
 
     // Endpoint per l'eliminazione di un Team (metodo DELETE)
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTeam(@PathVariable Long id) {
+        // Il Service lancerà NoSuchElementException se non trovato, che verrà catturato dal GlobalExceptionHandler
         teamService.deleteTeam(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
     // Endpoint per ottenere un Team dal nome (metodo GET)
     @GetMapping("/byName")
     public ResponseEntity<TeamResponseDto> getTeamByName(@RequestParam String name) {
-        Team team = teamService.getTeamByName(name);
-        if (team != null) {
-            return new ResponseEntity<>(convertToTeamResponseDto(team), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        TeamResponseDto teamDto = teamService.getTeamByName(name)
+                .orElseThrow(() -> new NoSuchElementException("Team not found with name: " + name));
+        return new ResponseEntity<>(teamDto, HttpStatus.OK);
     }
 
     // Endpoint per aggiungere un giocatore a una Squadra (metodo POST)
     @PostMapping("/{teamId}/players/{playerId}")
     public ResponseEntity<TeamResponseDto> addPlayerToTeam(@PathVariable Long teamId, @PathVariable Long playerId) {
-        Team updatedTeam = teamService.addPlayerToTeam(teamId, playerId);
-
-        return new ResponseEntity<>(convertToTeamResponseDto(updatedTeam), HttpStatus.OK);
-    }
-
-    // Endpoint per aggiungere una lista di giocatori a una squadra (metodo POST)
-    @PostMapping("/{teamId}/players")
-    public ResponseEntity<TeamResponseDto> addPlayersListToTeam(@PathVariable Long teamId, @RequestBody List<Long> playerIds) {
-        Team updatedTeam = teamService.addPlayersListToTeam(teamId, playerIds);
-
-        return new ResponseEntity<>(convertToTeamResponseDto(updatedTeam), HttpStatus.OK);
+        // Le eccezioni saranno gestite dal GlobalExceptionHandler
+        TeamResponseDto updatedTeamDto = teamService.addPlayerToTeam(teamId, playerId);
+        return new ResponseEntity<>(updatedTeamDto, HttpStatus.OK);
     }
 
     // Endpoint per rimuovere un giocatore da un team esistente (metodo DELETE)
     @DeleteMapping("/{teamId}/players/{playerId}")
     public ResponseEntity<TeamResponseDto> removePlayerFromTeam(@PathVariable Long teamId, @PathVariable Long playerId) {
-        Team updatedTeam = teamService.removePlayerFromTeam(teamId, playerId);
+        // Le eccezioni saranno gestite dal GlobalExceptionHandler
+        TeamResponseDto updatedTeamDto = teamService.removePlayerFromTeam(teamId, playerId);
+        return new ResponseEntity<>(updatedTeamDto, HttpStatus.OK);
+    }
 
-        return new ResponseEntity<>(convertToTeamResponseDto(updatedTeam), HttpStatus.OK);
+    // Endpoint per aggiungere una Lega a una Squadra (metodo POST)
+    @PostMapping("/{teamId}/leagues/{leagueId}")
+    public ResponseEntity<TeamResponseDto> addLeagueToTeam(@PathVariable Long teamId, @PathVariable Long leagueId) {
+        // Le eccezioni saranno gestite dal GlobalExceptionHandler
+        TeamResponseDto updatedTeamDto = teamService.addLeagueToTeam(teamId, leagueId);
+        return new ResponseEntity<>(updatedTeamDto, HttpStatus.OK);
+    }
+
+    // Endpoint per rimuovere una Lega da una Squadra (metodo DELETE)
+    @DeleteMapping("/{teamId}/leagues/{leagueId}")
+    public ResponseEntity<TeamResponseDto> removeLeagueFromTeam(@PathVariable Long teamId, @PathVariable Long leagueId) {
+        // Le eccezioni saranno gestite dal GlobalExceptionHandler
+        TeamResponseDto updatedTeamDto = teamService.removeLeagueFromTeam(teamId, leagueId);
+        return new ResponseEntity<>(updatedTeamDto, HttpStatus.OK);
+    }
+
+    // Endpoint per cercare squadre tramite anno di fondazione
+    @GetMapping("/byFoundingYear")
+    public ResponseEntity<List<TeamResponseDto>> getTeamsByFoundingYear(@RequestParam int year) {
+        List<TeamResponseDto> teams = teamService.getTeamsByFoundingYear(year);
+        return new ResponseEntity<>(teams, HttpStatus.OK);
+    }
+
+    // Endpoint per cercare squadre tramite il coach/allenatore
+    @GetMapping("/byCoach")
+    public ResponseEntity<List<TeamResponseDto>> getTeamsByCoach(@RequestParam String coach) {
+        List<TeamResponseDto> teams = teamService.getTeamsByCoach(coach);
+        return new ResponseEntity<>(teams, HttpStatus.OK);
     }
 }

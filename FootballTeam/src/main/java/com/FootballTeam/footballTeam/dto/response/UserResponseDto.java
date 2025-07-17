@@ -1,19 +1,16 @@
 package com.FootballTeam.footballTeam.dto.response;
 
-import com.FootballTeam.footballTeam.model.Role;
-
-
 public class UserResponseDto {
     private Long id;
     private String username;
-    private Role role;
+    private String role;
 
     // Costruttore vuoto
     public UserResponseDto() {
     }
 
     // Costruttore con Attributi
-    public UserResponseDto(Long id, String username, Role role) {
+    public UserResponseDto(Long id, String username, String role) {
         this.id = id;
         this.username = username;
         this.role = role;
@@ -29,7 +26,7 @@ public class UserResponseDto {
         return username;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
@@ -41,7 +38,7 @@ public class UserResponseDto {
         this.username = username;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 }
