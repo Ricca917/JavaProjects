@@ -8,12 +8,12 @@ import java.util.List;
 
 
 @Entity // Definisco Team come entità persistente
-@Table(name = "teams") // Creo tabella Teams nel DB
+@Table(name = "teams")
 
 public class Team {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Anche questo Id viene gestito dal DB
-    private Long id; // Campo creato per l'id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String teamName;
     private int foundingYear;
@@ -42,7 +42,7 @@ public class Team {
         this.foundingYear = foundingYear;
         this.president = president;
         this.coach = coach;
-        // La lista rosterPlayers è già inizializzata nella dichiarazione del campo.
+
     }
 
     // Getter e Setter
@@ -108,18 +108,18 @@ public class Team {
         }
     }
 
-    // Metodo per aggiungere un giocatore alla squadra (helper per la coerenza bidirezionale)
+    // Metodo per aggiungere un giocatore alla squadra
     public void addPlayer(Player player) {
         if (player != null && !this.rosterPlayers.contains(player)) {
             this.rosterPlayers.add(player);
-            player.setTeam(this); // Mantiene la coerenza bidirezionale
+            player.setTeam(this);
         }
     }
 
     // Metodo per la rimozione di un giocatore dalla squadra
     public void removePlayer(Player player) {
         if (player != null && this.rosterPlayers.remove(player)) {
-            player.setTeam(null); // Scollega il giocatore dalla squadra
+            player.setTeam(null);
         }
     }
 
@@ -138,7 +138,7 @@ public class Team {
         }
     }
 
-    // Metodo per stampare info sulla squadra (toString per API REST)
+    // Metodo per stampare info sulla squadra
     @Override
     public String toString() {
         return "Team{" +

@@ -3,8 +3,7 @@ package com.FootballTeam.footballTeam.model;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
-import java.util.Set; // Evita la duplicazione nella lista Team
-
+import java.util.Set;
 
 @Entity // definisco League come un'entità
 @Table(name = "leagues")
