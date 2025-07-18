@@ -278,7 +278,7 @@ class ContractServiceTest {
     void testDeleteContract_Success() {
         Contract contractToDelete = new Contract();
         contractToDelete.setId(1L);
-        contractToDelete.setPlayer(player); // Collega il contratto al giocatore
+        contractToDelete.setPlayer(player);
 
         when(contractRepository.findById(1L)).thenReturn(Optional.of(contractToDelete));
 

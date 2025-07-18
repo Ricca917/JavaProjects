@@ -3,9 +3,10 @@ package com.FootballTeam.footballTeam.model;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Objects; // Import aggiunto per Objects.hash e Objects.equals
 import java.util.Set;
 
-@Entity // definisco League come un'entità
+@Entity
 @Table(name = "leagues")
 public class League {
 
@@ -29,6 +30,12 @@ public class League {
 
     // Costruttore con Attributi
     public League(String name, String country) {
+        this.name = name;
+        this.country = country;
+    }
+
+    public League(Long id, String name, String country) {
+        this.id = id;
         this.name = name;
         this.country = country;
     }
@@ -68,7 +75,7 @@ public class League {
         this.teams.add(team);
         team.getLeagues().add(this);
     }
-    
+
     // Metodo per Togliere Squadre alla Lega/Campionato
     public void removeTeam(Team team) {
         this.teams.remove(team);
@@ -76,11 +83,25 @@ public class League {
     }
 
     // Metodo ToString per le informazioni relative alla Lega/Campionato
+    @Override
     public String toString() {
         return "League{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", country='" + country + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        League league = (League) o;
+        return Objects.equals(id, league.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
