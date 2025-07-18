@@ -35,15 +35,13 @@ public class GlobalExceptionHandler {
     // Gestione di errori "NoSuchElementException"
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND); // Restituisce 404 Not Found
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     // Gestione di altre eccezioni
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGlobalException(Exception exception) {
         System.err.println("Errore interno del server! " + exception.getMessage());
-        exception.printStackTrace(); // Utile per debug, stampa lo stack trace
-
         return new ResponseEntity<>("Si è verificato un errore interno del server! ", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

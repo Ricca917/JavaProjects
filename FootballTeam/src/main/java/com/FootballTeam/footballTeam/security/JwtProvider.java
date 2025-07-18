@@ -41,7 +41,7 @@ public class JwtProvider {
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
-    // Validazione del JWT
+    // Validazione del JWT (Invalid,Expired,Unsupported e Empty)
     public boolean validateToken(String authToken) {
         try {
             Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(authToken);

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PlayerServiceInterface {
-    // Metodi CRUD utilizzati dai DTO
     PlayerResponseDto createPlayer(PlayerRequestDto playerRequestDto);
     Optional<PlayerResponseDto> getPlayerById(Long id);
     List<PlayerResponseDto> getAllPlayers();
