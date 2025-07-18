@@ -27,12 +27,13 @@ public class LeagueService implements LeagueServiceInterface {
     private League convertToEntity(LeagueRequestDto leagueRequestDto) {
         League league = new League();
         league.setName(leagueRequestDto.getName());
+        league.setCountry(leagueRequestDto.getCountry());
         return league;
     }
 
     // Converte Entità League in LeagueResponseDto
     private LeagueResponseDto convertToDto(League league) {
-        return new LeagueResponseDto(league.getId(), league.getName());
+        return new LeagueResponseDto(league.getId(), league.getName(), league.getCountry());
     }
 
     @Override
@@ -63,6 +64,7 @@ public class LeagueService implements LeagueServiceInterface {
                 .orElseThrow(() -> new NoSuchElementException("League not found with ID: " + id));
 
         existingLeague.setName(leagueRequestDto.getName());
+        existingLeague.setCountry(leagueRequestDto.getCountry());
         League updatedLeague = leagueRepository.save(existingLeague);
         return convertToDto(updatedLeague);
     }

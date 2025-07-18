@@ -7,13 +7,17 @@ public class LeagueRequestDto {
     @NotBlank(message = "Il nome della lega non può essere vuoto")
     private String name;
 
+    @NotBlank(message = "Il paese della lega non può essere vuoto")
+    private String country;
+
     // Costruttore vuoto
     public LeagueRequestDto() {
     }
 
     // Costruttore con attributi
-    public LeagueRequestDto(String name) {
+    public LeagueRequestDto(String name, String country) { // Modifica il costruttore
         this.name = name;
+        this.country = country;
     }
 
     // Getter e Setter
@@ -23,5 +27,13 @@ public class LeagueRequestDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

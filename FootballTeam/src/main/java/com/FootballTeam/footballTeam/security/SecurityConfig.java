@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity; // IMPORTANTE!
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -43,6 +43,7 @@ public class SecurityConfig {
                         // Endpoint pubblici che non richiedono autenticazione (login e registrazione)
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/users").permitAll()
+                        .requestMatchers("/error").permitAll()
 
                         // Endpoint per visualizzare (GET) giocatori e squadre - Accessibili a USER e ADMIN
                         .requestMatchers(HttpMethod.GET, "/api/players/**").hasAnyRole("USER", "ADMIN")
@@ -66,7 +67,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/contracts").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/contracts/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/contracts/**").hasRole("ADMIN")
-
 
                         .anyRequest().authenticated()
                 );

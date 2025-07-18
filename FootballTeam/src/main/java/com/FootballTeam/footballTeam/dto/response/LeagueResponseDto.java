@@ -3,6 +3,7 @@ package com.FootballTeam.footballTeam.dto.response;
 public class LeagueResponseDto {
     private Long id;
     private String name;
+    private String country;
 
     public LeagueResponseDto() {
     }
@@ -10,6 +11,12 @@ public class LeagueResponseDto {
     public LeagueResponseDto(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public LeagueResponseDto(Long id, String name, String country) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
     }
 
     public Long getId() {
@@ -28,4 +35,11 @@ public class LeagueResponseDto {
         this.name = name;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
 }

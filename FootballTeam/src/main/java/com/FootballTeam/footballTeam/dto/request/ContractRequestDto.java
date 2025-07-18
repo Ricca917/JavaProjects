@@ -12,12 +12,14 @@ public class ContractRequestDto {
     private LocalDate startDate;
 
     @NotNull(message = "La data di fine contratto non può essere nulla")
-    @FutureOrPresent(message = "La data di fine deve essere nel presente o nel futuro") // Aggiunta questa validazione
+    @FutureOrPresent(message = "La data di fine deve essere nel presente o nel futuro")
     private LocalDate endDate;
 
     @NotNull(message = "Lo stipendio non può essere nullo")
-    @DecimalMin(value = "0.01", message = "Lo stipendio minimo deve essere un valore positivo") // Modificato a 0.01
+    @DecimalMin(value = "0.01", message = "Lo stipendio minimo deve essere un valore positivo")
     private BigDecimal salary;
+
+    private String provisions;
 
     @NotNull(message = "L'ID del giocatore non può essere nullo")
     private Long playerId;
@@ -27,10 +29,11 @@ public class ContractRequestDto {
     }
 
     // Costruttore con Attributi
-    public ContractRequestDto(LocalDate startDate, LocalDate endDate, BigDecimal salary, Long playerId) {
+    public ContractRequestDto(LocalDate startDate, LocalDate endDate, BigDecimal salary, String provisions, Long playerId) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.salary = salary;
+        this.provisions = provisions; // Assegna provisions
         this.playerId = playerId;
     }
 
@@ -58,6 +61,14 @@ public class ContractRequestDto {
 
     public void setSalary(BigDecimal salary) {
         this.salary = salary;
+    }
+
+    public String getProvisions() {
+        return provisions;
+    }
+
+    public void setProvisions(String provisions) {
+        this.provisions = provisions;
     }
 
     public Long getPlayerId() {

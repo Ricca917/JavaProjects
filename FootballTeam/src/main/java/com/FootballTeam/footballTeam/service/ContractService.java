@@ -33,6 +33,7 @@ public class ContractService implements ContractServiceInterface {
         contract.setStartDate(contractRequestDto.getStartDate());
         contract.setEndDate(contractRequestDto.getEndDate());
         contract.setSalary(contractRequestDto.getSalary());
+        contract.setProvisions(contractRequestDto.getProvisions());
         return contract;
     }
 
@@ -114,6 +115,7 @@ public class ContractService implements ContractServiceInterface {
         existingContract.setStartDate(contractRequestDto.getStartDate());
         existingContract.setEndDate(contractRequestDto.getEndDate());
         existingContract.setSalary(contractRequestDto.getSalary());
+        existingContract.setProvisions(contractRequestDto.getProvisions());
         Contract updatedContract = contractRepository.save(existingContract);
         return convertToDto(updatedContract);
     }
