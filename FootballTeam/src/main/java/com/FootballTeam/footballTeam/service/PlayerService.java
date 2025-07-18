@@ -6,21 +6,21 @@ import com.FootballTeam.footballTeam.model.Player;
 import com.FootballTeam.footballTeam.model.Team;
 import com.FootballTeam.footballTeam.repository.PlayerRepository;
 import com.FootballTeam.footballTeam.repository.TeamRepository;
-import org.springframework.beans.factory.annotation.Autowired; // Con Autowired faremo fare a spring le iniezioni necessarie
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // Serve per gestire le Transazioni
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional; // Utilizzato per i metodi "findBy..."
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class PlayerService implements PlayerServiceInterface {
-    private final PlayerRepository playerRepository; // Iniezione per accedere ai dati giocatori
-    private final TeamRepository teamRepository; // Iniezione per accedere ai dati delle squadre
+    private final PlayerRepository playerRepository;
+    private final TeamRepository teamRepository;
 
     @Autowired
     public PlayerService(PlayerRepository playerRepository, TeamRepository teamRepository) {
@@ -53,10 +53,10 @@ public class PlayerService implements PlayerServiceInterface {
             Team team = teamRepository.findById(playerDto.getTeamId())
                     .orElseThrow(() -> new NoSuchElementException("Team with ID " + playerDto.getTeamId() + " not found."));
             player.setTeam(team);
-            player.setIsFreeAgent(false); // se il giocatore ha una squadra, non è Flaggato come FreeAgent
+            player.setIsFreeAgent(false);
         } else {
             player.setTeam(null);
-            player.setIsFreeAgent(true); // se il giocatore non ha una squadra, viene Flaggato come FreeAgent
+            player.setIsFreeAgent(true);
         }
         return player;
     }
