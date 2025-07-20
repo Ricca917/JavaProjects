@@ -1,50 +1,66 @@
 package com.FootballTeam.footballTeam.controller;
 
 import com.FootballTeam.footballTeam.dto.request.UserRequestDto;
-import com.FootballTeam.footballTeam.model.Role;
-import com.FootballTeam.footballTeam.model.User;
-import com.FootballTeam.footballTeam.repository.UserRepository;
+import com.FootballTeam.footballTeam.dto.response.UserResponseDto;
+import com.FootballTeam.footballTeam.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final UserServiceInterface userService;
 
     @Autowired
-    public UserController(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public UserController(UserServiceInterface userService) {
+        this.userService = userService;
     }
 
+    // Endpoint POST per creare un utente
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody UserRequestDto userRequestDto) {
-        if (userRepository.existsByUsername(userRequestDto.getUsername())) {
-            return new ResponseEntity<>("Username already exists!", HttpStatus.BAD_REQUEST);
-        }
-        User user = new User();
-        user.setUsername(userRequestDto.getUsername());
-        user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto userRequestDto) {
+        UserResponseDto createdUser = userService.createUser(userRequestDto);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
 
-        try {
-            Role assignedRole = Role.USER;
-            if (userRequestDto.getRole() != null) {
-                assignedRole = Role.valueOf(userRequestDto.getRole().toUpperCase());
-            }
-            user.setRole(assignedRole);
+    // Endpoint per visualizzare tutti gli utenti (solo ADMIN)
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+        List<UserResponseDto> users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>("Invalid role specified!", HttpStatus.BAD_REQUEST);
-        }
+    // Endpoint per visualizzare un utente tramite ID
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
+        UserResponseDto userDto = userService.getUserById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
 
+    // Endpoint per aggiornare un utente
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto) {
+        UserResponseDto updatedUser = userService.updateUser(id, userRequestDto);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
 
-        userRepository.save(user);
-        return new ResponseEntity<>("User created successfully!", HttpStatus.CREATED);
+    // Endpoint per eliminare un utente
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

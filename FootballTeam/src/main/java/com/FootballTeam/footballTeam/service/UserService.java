@@ -2,7 +2,7 @@ package com.FootballTeam.footballTeam.service;
 
 import com.FootballTeam.footballTeam.dto.request.UserRequestDto;
 import com.FootballTeam.footballTeam.dto.response.UserResponseDto;
-import com.FootballTeam.footballTeam.model.Role; // IMPORTA L'ENUM ROLE
+import com.FootballTeam.footballTeam.model.Role;
 import com.FootballTeam.footballTeam.model.User;
 import com.FootballTeam.footballTeam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +38,28 @@ public class UserService implements UserServiceInterface {
             try {
                 assignedRole = Role.valueOf(userRequestDto.getRole().toUpperCase());
             } catch (IllegalArgumentException e) {
-                System.err.println("Invalid role string provided: " + userRequestDto.getRole() + ". Assigning default ROLE.USER.");
+                System.err.println("Errore di conversione ruolo in convertToEntity: " + userRequestDto.getRole() + ". Assegnato ruolo di default USER.");
+
             }
         }
         user.setRole(assignedRole);
-
         return user;
     }
 
-    // Converte Entità User in UserResponseDto
+    // Metodo helper per convertire Entità in DTO
     private UserResponseDto convertToDto(User user) {
-        return new UserResponseDto(user.getId(), user.getUsername(), user.getRole().name());
+        String roleName = "UNKNOWN";
+        if (user.getRole() != null) {
+            try {
+                roleName = user.getRole().name();
+            } catch (Exception e) {
+
+                System.err.println("Errore durante l'ottenimento del nome del ruolo per l'utente " + user.getUsername() + ": " + e.getMessage());
+            }
+        } else {
+            System.err.println("Attenzione: Ruolo nullo per l'utente: " + user.getUsername() + ". Assegnato 'UNKNOWN'.");
+        }
+        return new UserResponseDto(user.getId(), user.getUsername(), roleName);
     }
 
     @Override
@@ -62,11 +73,17 @@ public class UserService implements UserServiceInterface {
         return convertToDto(savedUser);
     }
 
+
     @Override
     public List<UserResponseDto> getAllUsers() {
-        return userRepository.findAll().stream()
+        System.out.println("DEBUG: Inizio getAllUsers in UserService");
+        List<User> users = userRepository.findAll();
+        System.out.println("DEBUG: Trovati " + users.size() + " utenti dal repository.");
+        List<UserResponseDto> userDtos = users.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
+        System.out.println("DEBUG: Conversione in DTO completata.");
+        return userDtos;
     }
 
     @Override
