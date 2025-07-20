@@ -37,24 +37,24 @@ class LeagueServiceTest {
         league1 = new League();
         league1.setId(1L);
         league1.setName("Serie A");
-        league1.setCountry("Italy");
+        league1.setCountry("Italia");
 
         league2 = new League();
         league2.setId(2L);
         league2.setName("Premier League");
-        league2.setCountry("England");
+        league2.setCountry("Inghilterra");
     }
 
     @Test
     void testCreateLeague_Success() {
         LeagueRequestDto requestDto = new LeagueRequestDto();
         requestDto.setName("La Liga");
-        requestDto.setCountry("Spain");
+        requestDto.setCountry("Spagna");
 
         League newLeague = new League();
         newLeague.setId(3L);
         newLeague.setName("La Liga");
-        newLeague.setCountry("Spain");
+        newLeague.setCountry("Spagna");
 
         when(leagueRepository.save(any(League.class))).thenReturn(newLeague);
 
@@ -109,8 +109,8 @@ class LeagueServiceTest {
     @Test
     void testUpdateLeague_Success() {
         LeagueRequestDto requestDto = new LeagueRequestDto();
-        requestDto.setName("Bundesliga Updated");
-        requestDto.setCountry("Germany Updated");
+        requestDto.setName("Bundesliga Aggiornata");
+        requestDto.setCountry("Germany Aggiornata");
 
         League updatedLeague = new League();
         updatedLeague.setId(league1.getId());
@@ -135,15 +135,15 @@ class LeagueServiceTest {
     void testUpdateLeague_NotFound() {
         Long nonExistentId = 99L;
         LeagueRequestDto requestDto = new LeagueRequestDto();
-        requestDto.setName("Non Existent");
-        requestDto.setCountry("Nowhere");
+        requestDto.setName("Inesistente");
+        requestDto.setCountry("Nessuno");
 
         when(leagueRepository.findById(nonExistentId)).thenReturn(Optional.empty());
 
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
             leagueService.updateLeague(nonExistentId, requestDto);
         });
-        assertTrue(thrown.getMessage().contains("League not found with ID: " + nonExistentId));
+        assertTrue(thrown.getMessage().contains("Campionato/Coppa non trovata con ID: " + nonExistentId));
 
         verify(leagueRepository, times(1)).findById(nonExistentId);
         verify(leagueRepository, never()).save(any(League.class));
@@ -168,7 +168,7 @@ class LeagueServiceTest {
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
             leagueService.deleteLeague(nonExistentId);
         });
-        assertTrue(thrown.getMessage().contains("League not found with ID: " + nonExistentId));
+        assertTrue(thrown.getMessage().contains("Campionato/Coppa non trovata con ID: " + nonExistentId));
 
         verify(leagueRepository, times(1)).existsById(nonExistentId);
         verify(leagueRepository, never()).deleteById(anyLong());

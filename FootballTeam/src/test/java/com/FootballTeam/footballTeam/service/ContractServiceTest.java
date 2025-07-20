@@ -51,8 +51,8 @@ class ContractServiceTest {
                 "Messi",
                 LocalDate.of(1987, 6, 24),
                 37,
-                "Forward",
-                "Argentinian",
+                "Attaccante",
+                "Argentina",
                 10,
                 800,
                 700,
@@ -70,7 +70,7 @@ class ContractServiceTest {
         ContractRequestDto requestDto = new ContractRequestDto();
         requestDto.setStartDate(LocalDate.of(2024, 1, 1));
         requestDto.setEndDate(LocalDate.of(2025, 12, 31));
-        requestDto.setSalary(new BigDecimal("1000000.0")); // Usa BigDecimal
+        requestDto.setSalary(new BigDecimal("1000000.0"));
         requestDto.setProvisions("Bonus Performance");
         requestDto.setPlayerId(player.getId());
 
@@ -114,7 +114,7 @@ class ContractServiceTest {
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
             contractService.createContract(requestDto);
         });
-        assertTrue(thrown.getMessage().contains("Player not found with ID: " + requestDto.getPlayerId()));
+        assertTrue(thrown.getMessage().contains("Giocatore non trovato con ID: " + requestDto.getPlayerId()));
 
         verify(playerRepository, times(1)).findById(requestDto.getPlayerId());
         verify(contractRepository, never()).save(any(Contract.class));
@@ -135,7 +135,7 @@ class ContractServiceTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             contractService.createContract(requestDto);
         });
-        assertTrue(thrown.getMessage().contains("Player with ID: " + player.getId() + " already has an active contract."));
+        assertTrue(thrown.getMessage().contains("Giocatore con ID: " + player.getId() + " ha già un contratto attivo."));
 
         verify(playerRepository, times(1)).findById(player.getId());
         verify(contractRepository, never()).save(any(Contract.class));
@@ -206,7 +206,7 @@ class ContractServiceTest {
         requestDto.setStartDate(LocalDate.of(2024, 1, 1));
         requestDto.setEndDate(LocalDate.of(2026, 12, 31));
         requestDto.setSalary(new BigDecimal("1200000.0"));
-        requestDto.setProvisions("New Provisions");
+        requestDto.setProvisions("Nuova Clausola");
         requestDto.setPlayerId(player.getId());
 
         Contract existingContract = new Contract();
@@ -214,7 +214,7 @@ class ContractServiceTest {
         existingContract.setStartDate(LocalDate.of(2024, 1, 1));
         existingContract.setEndDate(LocalDate.of(2025, 12, 31));
         existingContract.setSalary(new BigDecimal("1000000.0"));
-        existingContract.setProvisions("Old Provisions");
+        existingContract.setProvisions("Vecchia Clausola");
         existingContract.setPlayer(player);
 
         when(contractRepository.findById(1L)).thenReturn(Optional.of(existingContract));
@@ -246,7 +246,7 @@ class ContractServiceTest {
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
             contractService.updateContract(contractId, requestDto);
         });
-        assertTrue(thrown.getMessage().contains("Contract not found with ID: " + contractId));
+        assertTrue(thrown.getMessage().contains("Contratto non trovato con ID: " + contractId));
 
         verify(contractRepository, times(1)).findById(contractId);
         verify(contractRepository, never()).save(any(Contract.class));
@@ -313,7 +313,7 @@ class ContractServiceTest {
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
             contractService.deleteContract(contractId);
         });
-        assertTrue(thrown.getMessage().contains("Contract not found with ID: " + contractId));
+        assertTrue(thrown.getMessage().contains("Contratto non trovato con ID: " + contractId));
 
         verify(contractRepository, times(1)).findById(contractId);
         verify(contractRepository, never()).delete(any(Contract.class));

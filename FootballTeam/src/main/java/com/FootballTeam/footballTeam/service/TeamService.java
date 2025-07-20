@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.NoSuchElementException; // Import corretto per NoSuchElementException
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -78,7 +78,7 @@ public class TeamService implements TeamServiceInterface {
                         .filter(id -> !foundIds.contains(id))
                         .map(String::valueOf)
                         .collect(Collectors.joining(", "));
-                throw new NoSuchElementException("One or more leagues with IDs [" + missingIds + "] not found.");
+                throw new NoSuchElementException("Uno o più Campionati/Coppe con ID: [" + missingIds + "] non trovati.");
             }
 
             for (League league : leagues) {
@@ -103,7 +103,7 @@ public class TeamService implements TeamServiceInterface {
                     .map(this::convertPlayerToDto)
                     .collect(Collectors.toList()));
         } else {
-            dto.setPlayers(new ArrayList<>()); // Assicurati che non sia null
+            dto.setPlayers(new ArrayList<>());
         }
 
         // Mappa la lista delle leghe
@@ -112,7 +112,7 @@ public class TeamService implements TeamServiceInterface {
                     .map(this::convertLeagueToDto)
                     .collect(Collectors.toSet()));
         } else {
-            dto.setLeagues(new HashSet<>()); // Assicurati che non sia null
+            dto.setLeagues(new HashSet<>());
         }
         return dto;
     }
@@ -144,7 +144,7 @@ public class TeamService implements TeamServiceInterface {
     @Transactional
     public TeamResponseDto updateTeam(Long id, TeamRequestDto teamRequestDto) {
         Team existingTeam = teamRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Team not found with ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Squadra non trovata con ID: " + id));
 
         // Aggiorna i campi base
         existingTeam.setTeamName(teamRequestDto.getTeamName());
@@ -162,7 +162,7 @@ public class TeamService implements TeamServiceInterface {
                         .filter(leagueId -> !foundIds.contains(leagueId))
                         .map(String::valueOf)
                         .collect(Collectors.joining(", "));
-                throw new NoSuchElementException("One or more leagues with IDs [" + missingIds + "] not found for update.");
+                throw new NoSuchElementException("Una o più Campionati/Coppe con ID: [" + missingIds + "] non trovate per l'aggiornamento.");
             }
             newLeagues.addAll(fetchedLeagues);
         }
@@ -187,7 +187,7 @@ public class TeamService implements TeamServiceInterface {
     @Transactional
     public void deleteTeam(Long id) {
         Team team = teamRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Team not found with ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Squadra non trovata con ID: " + id));
 
 
         if (team.getRosterPlayers() != null) {
@@ -231,16 +231,16 @@ public class TeamService implements TeamServiceInterface {
     @Transactional
     public TeamResponseDto addPlayerToTeam(Long teamId, Long playerId) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new NoSuchElementException("Team not found with ID: " + teamId));
+                .orElseThrow(() -> new NoSuchElementException("Squadra non trovata con ID: " + teamId));
         Player player = playerRepository.findById(playerId)
-                .orElseThrow(() -> new NoSuchElementException("Player not found with ID: " + playerId));
+                .orElseThrow(() -> new NoSuchElementException("Giocatore non trovato con ID: " + playerId));
 
         if (player.getTeam() != null && player.getTeam().getId().equals(teamId)) {
             return convertToDto(team);
         }
 
         if (player.getTeam() != null && !player.getTeam().getId().equals(teamId)) {
-            throw new IllegalArgumentException("Player with ID " + playerId + " is already assigned to Team ID " + player.getTeam().getId());
+            throw new IllegalArgumentException("Giocatore con ID " + playerId + " è già associato ad una squadra con ID: " + player.getTeam().getId());
         }
 
         team.addPlayer(player);
@@ -254,13 +254,13 @@ public class TeamService implements TeamServiceInterface {
     @Transactional
     public TeamResponseDto removePlayerFromTeam(Long teamId, Long playerId) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new NoSuchElementException("Team not found with ID: " + teamId));
+                .orElseThrow(() -> new NoSuchElementException("Squadra non trovata con ID: " + teamId));
         Player player = playerRepository.findById(playerId)
-                .orElseThrow(() -> new NoSuchElementException("Player not found with ID: " + playerId));
+                .orElseThrow(() -> new NoSuchElementException("Giocatore non trovato con ID: " + playerId));
 
 
         if (player.getTeam() == null || !player.getTeam().getId().equals(teamId)) {
-            throw new IllegalArgumentException("Player with ID " + playerId + " is not part of Team ID " + teamId + ".");
+            throw new IllegalArgumentException("Giocatore con ID" + playerId + " non è associato ad una squadra con ID:" + teamId + ".");
         }
 
         team.removePlayer(player);
@@ -274,9 +274,9 @@ public class TeamService implements TeamServiceInterface {
     @Transactional
     public TeamResponseDto addLeagueToTeam(Long teamId, Long leagueId) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new NoSuchElementException("Team not found with ID: " + teamId));
+                .orElseThrow(() -> new NoSuchElementException("Squadra non trovata con ID: " + teamId));
         League league = leagueRepository.findById(leagueId)
-                .orElseThrow(() -> new NoSuchElementException("League not found with ID: " + leagueId));
+                .orElseThrow(() -> new NoSuchElementException("Campionato/Coppa non trovata con ID: " + leagueId));
 
         if (team.getLeagues().contains(league)) {
             return convertToDto(team);
@@ -291,12 +291,12 @@ public class TeamService implements TeamServiceInterface {
     @Transactional
     public TeamResponseDto removeLeagueFromTeam(Long teamId, Long leagueId) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new NoSuchElementException("Team not found with ID: " + teamId));
+                .orElseThrow(() -> new NoSuchElementException("Squadra non trovata con ID: " + teamId));
         League league = leagueRepository.findById(leagueId)
-                .orElseThrow(() -> new NoSuchElementException("League not found with ID: " + leagueId));
+                .orElseThrow(() -> new NoSuchElementException("Campionato/Coppa non trovata con ID: " + leagueId));
 
         if (!team.getLeagues().contains(league)) {
-            throw new IllegalArgumentException("Team with ID " + teamId + " is not part of League with ID " + leagueId + ".");
+            throw new IllegalArgumentException("Squadra con ID: " + teamId + " non è parte di quel Campionato/Coppa " + leagueId + ".");
         }
 
         team.removeLeague(league);

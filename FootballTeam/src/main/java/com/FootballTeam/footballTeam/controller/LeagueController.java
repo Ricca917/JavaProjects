@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@RestController // Indica che questa è una classe Controller REST
+@RestController
 @RequestMapping("/api/leagues")
 public class LeagueController {
 
-    private final LeagueService leagueService; // Inietta il servizio per le leghe
+    private final LeagueService leagueService;
 
     @Autowired // Costruttore per l'iniezione delle dipendenze
     public LeagueController(LeagueService leagueService) {
@@ -44,7 +44,7 @@ public class LeagueController {
     @GetMapping("/{id}")
     public ResponseEntity<LeagueResponseDto> getLeagueById(@PathVariable Long id) {
         LeagueResponseDto leagueDto = leagueService.getLeagueById(id)
-                .orElseThrow(() -> new NoSuchElementException("League not found with ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Campionato/Coppa non trovata con ID: " + id));
         return new ResponseEntity<>(leagueDto, HttpStatus.OK);
     }
 

@@ -80,12 +80,12 @@ CREATE TABLE IF NOT EXISTS team_leagues (
 -- Inserimenti nella tabella 'leagues'
 INSERT INTO leagues (name, country) VALUES
 ('Serie A', 'Italy'),
-('Premier League', 'England');
+('Premier League', 'Inghilterra');
 
 -- Inserimento nella tabella 'teams'
 INSERT INTO teams (team_name, founding_year, president, coach) VALUES
-('Juventus', 1897, 'Gianluca Ferrero', 'Thiago Motta'),
-('Manchester United', 1878, 'Joel Glazer', 'Erik ten Hag');
+('Juventus', 1897, 'Gianluca Ferrero', 'Igor Tudor'),
+('Manchester United', 1878, 'Joel Glazer', 'Arne Slot');
 
 -- Associazione delle squadre alle leghe nella tabella 'team_leagues' (ManyToMany)
 INSERT INTO team_leagues (team_id, league_id) VALUES

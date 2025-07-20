@@ -37,7 +37,7 @@ public class PlayerRequestDto {
     @Min(value = 0, message = "I goal non possono essere negativi")
     private int goals;
 
-    private Long teamId; // L'ID della squadra a cui assegnare il giocatore (può essere null)
+    private Long teamId;
 
     // Costruttore vuoto
     public PlayerRequestDto() {

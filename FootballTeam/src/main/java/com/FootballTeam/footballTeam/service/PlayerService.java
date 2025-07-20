@@ -48,7 +48,7 @@ public class PlayerService implements PlayerServiceInterface {
         player.setGoals(playerDto.getGoals());
         player.setIsFreeAgent(playerDto.getIsFreeAgent());
 
-        // Relazione Player - Team usando teamId
+        // Relazione Player - Team
         if (playerDto.getTeamId() != null) {
             Team team = teamRepository.findById(playerDto.getTeamId())
                     .orElseThrow(() -> new NoSuchElementException("Team with ID " + playerDto.getTeamId() + " not found."));
@@ -114,7 +114,7 @@ public class PlayerService implements PlayerServiceInterface {
     @Transactional
     public PlayerResponseDto updatePlayer(Long id, PlayerRequestDto playerRequestDto) {
         Player existingPlayer = playerRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Player not Found with ID:" + id));
+                .orElseThrow(() -> new NoSuchElementException("Giocatore non trovato con ID:" + id));
 
         Team oldTeam = existingPlayer.getTeam();
         if (oldTeam != null) {
@@ -139,7 +139,7 @@ public class PlayerService implements PlayerServiceInterface {
         // Associazione con la nuova squadra o FreeAgency
         if (playerRequestDto.getTeamId() != null) {
             Team newTeam = teamRepository.findById(playerRequestDto.getTeamId())
-                    .orElseThrow(() -> new NoSuchElementException("Team with ID" + playerRequestDto.getTeamId() + " not found."));
+                    .orElseThrow(() -> new NoSuchElementException("Squadra con ID" + playerRequestDto.getTeamId() + " non trovata."));
             existingPlayer.setTeam(newTeam);
             newTeam.addPlayer(existingPlayer);
             existingPlayer.setIsFreeAgent(false);
@@ -161,7 +161,7 @@ public class PlayerService implements PlayerServiceInterface {
     @Transactional
     public void deletePlayer(Long id) {
         Player player = playerRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Player not found with ID:" + id));
+                .orElseThrow(() -> new NoSuchElementException("Giocatore non trovato con ID" + id));
         if (player.getTeam() != null) {
             player.getTeam().removePlayer(player);
             teamRepository.save(player.getTeam());
@@ -172,7 +172,7 @@ public class PlayerService implements PlayerServiceInterface {
     @Override
     public List<PlayerResponseDto> getPlayersByTeamId(Long teamId) {
         teamRepository.findById(teamId)
-                .orElseThrow(() -> new NoSuchElementException("Team with ID " + teamId + " not found."));
+                .orElseThrow(() -> new NoSuchElementException("Squadra con ID " + teamId + " non trovata."));
         return playerRepository.findByTeamId(teamId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

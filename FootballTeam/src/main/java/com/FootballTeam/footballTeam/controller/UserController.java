@@ -31,7 +31,7 @@ public class UserController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    // Endpoint per visualizzare tutti gli utenti (solo ADMIN)
+    // Endpoint per visualizzare tutti gli utenti
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
@@ -44,7 +44,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
         UserResponseDto userDto = userService.getUserById(id)
-                .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Utente non trovato con ID: " + id));
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 

@@ -40,7 +40,7 @@ public class TeamController {
     @GetMapping("/{id}")
     public ResponseEntity<TeamResponseDto> getTeamById(@PathVariable Long id) {
         TeamResponseDto teamDto = teamService.getTeamById(id)
-                .orElseThrow(() -> new NoSuchElementException("Team not found with ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Squadra non trovata con ID: " + id));
         return new ResponseEntity<>(teamDto, HttpStatus.OK);
     }
 
@@ -54,7 +54,6 @@ public class TeamController {
     // Endpoint per l'eliminazione di un Team (metodo DELETE)
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTeam(@PathVariable Long id) {
-        // Il Service lancerà NoSuchElementException se non trovato, che verrà catturato dal GlobalExceptionHandler
         teamService.deleteTeam(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -70,7 +69,6 @@ public class TeamController {
     // Endpoint per aggiungere un giocatore a una Squadra (metodo POST)
     @PostMapping("/{teamId}/players/{playerId}")
     public ResponseEntity<TeamResponseDto> addPlayerToTeam(@PathVariable Long teamId, @PathVariable Long playerId) {
-        // Le eccezioni saranno gestite dal GlobalExceptionHandler
         TeamResponseDto updatedTeamDto = teamService.addPlayerToTeam(teamId, playerId);
         return new ResponseEntity<>(updatedTeamDto, HttpStatus.OK);
     }
@@ -78,7 +76,6 @@ public class TeamController {
     // Endpoint per rimuovere un giocatore da un team esistente (metodo DELETE)
     @DeleteMapping("/{teamId}/players/{playerId}")
     public ResponseEntity<TeamResponseDto> removePlayerFromTeam(@PathVariable Long teamId, @PathVariable Long playerId) {
-        // Le eccezioni saranno gestite dal GlobalExceptionHandler
         TeamResponseDto updatedTeamDto = teamService.removePlayerFromTeam(teamId, playerId);
         return new ResponseEntity<>(updatedTeamDto, HttpStatus.OK);
     }
@@ -86,7 +83,6 @@ public class TeamController {
     // Endpoint per aggiungere una Lega a una Squadra (metodo POST)
     @PostMapping("/{teamId}/leagues/{leagueId}")
     public ResponseEntity<TeamResponseDto> addLeagueToTeam(@PathVariable Long teamId, @PathVariable Long leagueId) {
-        // Le eccezioni saranno gestite dal GlobalExceptionHandler
         TeamResponseDto updatedTeamDto = teamService.addLeagueToTeam(teamId, leagueId);
         return new ResponseEntity<>(updatedTeamDto, HttpStatus.OK);
     }
@@ -94,7 +90,6 @@ public class TeamController {
     // Endpoint per rimuovere una Lega da una Squadra (metodo DELETE)
     @DeleteMapping("/{teamId}/leagues/{leagueId}")
     public ResponseEntity<TeamResponseDto> removeLeagueFromTeam(@PathVariable Long teamId, @PathVariable Long leagueId) {
-        // Le eccezioni saranno gestite dal GlobalExceptionHandler
         TeamResponseDto updatedTeamDto = teamService.removeLeagueFromTeam(teamId, leagueId);
         return new ResponseEntity<>(updatedTeamDto, HttpStatus.OK);
     }

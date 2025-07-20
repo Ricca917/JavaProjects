@@ -74,35 +74,119 @@ public class Player {
 
 
     // Getter e Setter
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
-    public LocalDate getDateOfBirth() { return dateOfBirth; }
-    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
-    public String getPosition() { return position; }
-    public void setPosition(String position) { this.position = position; }
-    public String getNationality() { return nationality; }
-    public void setNationality(String nationality) { this.nationality = nationality; }
-    public int getJerseyNumber() { return jerseyNumber; }
-    public void setJerseyNumber(int jerseyNumber) { this.jerseyNumber = jerseyNumber; }
-    public int getAppearances() { return appearances; }
-    public void setAppearances(int appearances) { this.appearances = appearances; }
-    public int getGoals() { return goals; }
-    public void setGoals(int goals) { this.goals = goals; }
-    public double getSalary() { return salary; }
-    public void setSalary(double salary) { this.salary = salary; }
-    public boolean getIsFreeAgent() { return isFreeAgent; }
-    public void setIsFreeAgent(boolean isFreeAgent) { this.isFreeAgent = isFreeAgent; }
-    public boolean isFreeAgent() { return isFreeAgent; }
-    public void setFreeAgent(boolean freeAgent) { isFreeAgent = freeAgent; }
-    public Team getTeam() { return team; }
-    public void setTeam(Team team) { this.team = team; }
-    public Contract getContract() { return contract; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public int getJerseyNumber() {
+        return jerseyNumber;
+    }
+
+    public void setJerseyNumber(int jerseyNumber) {
+        this.jerseyNumber = jerseyNumber;
+    }
+
+    public int getAppearances() {
+        return appearances;
+    }
+
+    public void setAppearances(int appearances) {
+        this.appearances = appearances;
+    }
+
+    public int getGoals() {
+        return goals;
+    }
+
+    public void setGoals(int goals) {
+        this.goals = goals;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public boolean getIsFreeAgent() {
+        return isFreeAgent;
+    }
+
+    public void setIsFreeAgent(boolean isFreeAgent) {
+        this.isFreeAgent = isFreeAgent;
+    }
+
+    public boolean isFreeAgent() {
+        return isFreeAgent;
+    }
+
+    public void setFreeAgent(boolean freeAgent) {
+        isFreeAgent = freeAgent;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public Contract getContract() {
+        return contract;
+    }
+
     public void setContract(Contract contract) {
         this.contract = contract;
         if (contract != null && contract.getPlayer() != this) {

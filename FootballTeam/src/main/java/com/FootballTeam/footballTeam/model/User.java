@@ -20,7 +20,7 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    // Costruttore vuoto (richiesto da JPA)
+    // Costruttore vuoto
     public User() {
     }
 

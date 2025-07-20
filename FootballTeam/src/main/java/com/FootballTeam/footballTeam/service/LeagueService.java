@@ -61,7 +61,7 @@ public class LeagueService implements LeagueServiceInterface {
     @Transactional
     public LeagueResponseDto updateLeague(Long id, LeagueRequestDto leagueRequestDto) {
         League existingLeague = leagueRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("League not found with ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Campionato/Coppa non trovato con ID: " + id));
 
         existingLeague.setName(leagueRequestDto.getName());
         existingLeague.setCountry(leagueRequestDto.getCountry());
@@ -73,7 +73,7 @@ public class LeagueService implements LeagueServiceInterface {
     @Transactional
     public void deleteLeague(Long id) {
         if (!leagueRepository.existsById(id)) {
-            throw new NoSuchElementException("League not found with ID: " + id);
+            throw new NoSuchElementException("Campionato/Coppa non trovato con ID: " + id);
         }
 
         leagueRepository.deleteById(id);

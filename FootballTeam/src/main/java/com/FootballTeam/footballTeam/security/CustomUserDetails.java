@@ -16,19 +16,19 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
-    // Metodo per definire i ruoli all'interno di Spring
+    // Metodo per definire i ruoli
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 
-    // Metodo per ottenere la password (con hashing), Spring la confronta con quella usata nel Login!
+    // Metodo per ottenere la password
     @Override
     public String getPassword() {
         return user.getPassword();
     }
 
-    // Metodo per ottenere l'username, quello inserito nella Login!
+    // Metodo per ottenere l'username
     @Override
     public String getUsername() {
         return user.getUsername();

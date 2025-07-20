@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@RestController // Definisco questa classe come REST Controller
-@RequestMapping("/api/players") // Definisco una Route per le API relative ai Players
+@RestController
+@RequestMapping("/api/players")
 public class PlayerController {
     private final PlayerService playerService;
 
@@ -40,7 +40,7 @@ public class PlayerController {
     @GetMapping("/{id}")
     public ResponseEntity<PlayerResponseDto> getPlayerById(@PathVariable Long id) {
         PlayerResponseDto playerDto = playerService.getPlayerById(id)
-                .orElseThrow(() -> new NoSuchElementException("Player not found with ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Player non trovato con ID: " + id));
         return new ResponseEntity<>(playerDto, HttpStatus.OK);
     }
 

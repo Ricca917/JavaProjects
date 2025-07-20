@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity // Definisco Contract come una entità
-@Table(name = "contracts") // Nome della tabella nel DB!
+@Entity
+@Table(name = "contracts")
 public class Contract {
 
     @Id

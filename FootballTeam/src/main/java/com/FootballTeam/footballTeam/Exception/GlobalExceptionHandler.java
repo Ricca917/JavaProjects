@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException; // <-- IMPORT NECESSARIO
+import java.util.NoSuchElementException;
 
-@ControllerAdvice // Definisco la classe come Gestore GLOBALE di eccezioni
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Gestione errori di Validazione (@Valid)
+    // Gestione errori di Validazione
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();

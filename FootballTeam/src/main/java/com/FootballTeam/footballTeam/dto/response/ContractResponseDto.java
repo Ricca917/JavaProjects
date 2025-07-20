@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ContractResponseDto {
-    private final Long id; // Final per immutabilità
+    private final Long id;
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final BigDecimal salary;
-    private final String provisions; // Aggiunto provisions qui, se lo vuoi nella risposta
+    private final String provisions;
     private final Long playerId;
     private final String playerFirstName;
     private final String playerLastName;

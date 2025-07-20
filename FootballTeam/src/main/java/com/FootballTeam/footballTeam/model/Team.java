@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.List;
 
 
-@Entity // Definisco Team come entità persistente
 @Table(name = "teams")
 
 public class Team {
@@ -33,7 +32,7 @@ public class Team {
     @JoinTable(name = "team_leagues", joinColumns = @JoinColumn(name = "team_id"), inverseJoinColumns = @JoinColumn(name = "league_id"))
     private Set<League> leagues = new HashSet<>();
 
-    // Costruttore vuoto per la JPA
+    // Costruttore vuoto
     public Team() {}
 
     //Costruttore base

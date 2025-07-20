@@ -18,7 +18,7 @@ public class ContractController {
 
     private final ContractService contractService;
 
-    @Autowired // Costruttore per l'iniezione delle dipendenze
+    @Autowired
     public ContractController(ContractService contractService) {
         this.contractService = contractService;
     }
@@ -28,7 +28,7 @@ public class ContractController {
     @PostMapping
     public ResponseEntity<ContractResponseDto> createContract(@Valid @RequestBody ContractRequestDto contractRequestDto) {
         ContractResponseDto createdContract = contractService.createContract(contractRequestDto);
-        return new ResponseEntity<>(createdContract, HttpStatus.CREATED); // Restituisce 201 Created
+        return new ResponseEntity<>(createdContract, HttpStatus.CREATED);
     }
 
     // Endpoint per ottenere tutti i contratti
@@ -36,7 +36,7 @@ public class ContractController {
     @GetMapping
     public ResponseEntity<List<ContractResponseDto>> getAllContracts() {
         List<ContractResponseDto> contracts = contractService.getAllContracts();
-        return new ResponseEntity<>(contracts, HttpStatus.OK); // Restituisce 200 OK
+        return new ResponseEntity<>(contracts, HttpStatus.OK);
     }
 
     // Endpoint per ottenere un contratto tramite ID
@@ -46,7 +46,7 @@ public class ContractController {
 
         ContractResponseDto contractDto = contractService.getContractById(id)
                 .orElseThrow(() -> new NoSuchElementException("Contract not found with ID: " + id));
-        return new ResponseEntity<>(contractDto, HttpStatus.OK); // Restituisce 200 OK
+        return new ResponseEntity<>(contractDto, HttpStatus.OK);
     }
 
     // Endpoint per aggiornare un contratto esistente
@@ -54,7 +54,7 @@ public class ContractController {
     @PutMapping("/{id}")
     public ResponseEntity<ContractResponseDto> updateContract(@PathVariable Long id, @Valid @RequestBody ContractRequestDto contractRequestDto) {
         ContractResponseDto updatedContract = contractService.updateContract(id, contractRequestDto);
-        return new ResponseEntity<>(updatedContract, HttpStatus.OK); // Restituisce 200 OK
+        return new ResponseEntity<>(updatedContract, HttpStatus.OK);
     }
 
     // Endpoint per eliminare un contratto
@@ -62,6 +62,6 @@ public class ContractController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContract(@PathVariable Long id) {
         contractService.deleteContract(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Restituisce 204 No Content
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

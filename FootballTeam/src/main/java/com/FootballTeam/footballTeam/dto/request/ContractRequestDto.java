@@ -33,7 +33,7 @@ public class ContractRequestDto {
         this.startDate = startDate;
         this.endDate = endDate;
         this.salary = salary;
-        this.provisions = provisions; // Assegna provisions
+        this.provisions = provisions;
         this.playerId = playerId;
     }
 

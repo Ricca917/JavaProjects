@@ -48,7 +48,7 @@ public class UserService implements UserServiceInterface {
 
     // Metodo helper per convertire Entità in DTO
     private UserResponseDto convertToDto(User user) {
-        String roleName = "UNKNOWN";
+        String roleName = "Sconosciuto";
         if (user.getRole() != null) {
             try {
                 roleName = user.getRole().name();
@@ -76,13 +76,10 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public List<UserResponseDto> getAllUsers() {
-        System.out.println("DEBUG: Inizio getAllUsers in UserService");
         List<User> users = userRepository.findAll();
-        System.out.println("DEBUG: Trovati " + users.size() + " utenti dal repository.");
         List<UserResponseDto> userDtos = users.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
-        System.out.println("DEBUG: Conversione in DTO completata.");
         return userDtos;
     }
 
@@ -96,11 +93,11 @@ public class UserService implements UserServiceInterface {
     @Transactional
     public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto) {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Utente non trovato con ID: " + id));
 
         if (!existingUser.getUsername().equals(userRequestDto.getUsername()) &&
                 userRepository.findByUsername(userRequestDto.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username '" + userRequestDto.getUsername() + "' already exists for another user.");
+            throw new IllegalArgumentException("Username '" + userRequestDto.getUsername() + "' esiste già ");
         }
 
         existingUser.setUsername(userRequestDto.getUsername());
@@ -113,7 +110,7 @@ public class UserService implements UserServiceInterface {
             try {
                 assignedRole = Role.valueOf(userRequestDto.getRole().toUpperCase());
             } catch (IllegalArgumentException e) {
-                System.err.println("Invalid role string provided for update: " + userRequestDto.getRole() + ". Keeping existing role.");
+                System.err.println("Ruolo non valido  " + userRequestDto.getRole() + ". ruolo attuale assegnato.");
                 assignedRole = existingUser.getRole();
             }
         }
@@ -128,7 +125,7 @@ public class UserService implements UserServiceInterface {
     @Transactional
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new NoSuchElementException("User not found with ID: " + id);
+            throw new NoSuchElementException("Utente non trovato con ID: " + id);
         }
         userRepository.deleteById(id);
     }

@@ -106,7 +106,7 @@ public class ContractService implements ContractServiceInterface {
     @Transactional
     public ContractResponseDto updateContract(Long id, ContractRequestDto contractRequestDto) {
         Contract existingContract = contractRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Contract not found with ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Contratto non trovato con ID: " + id));
 
         if (!existingContract.getPlayer().getId().equals(contractRequestDto.getPlayerId())) {
             throw new IllegalArgumentException("Cannot change the associated player (ID: " + contractRequestDto.getPlayerId() + ") for an existing contract via this update method.");
@@ -124,7 +124,7 @@ public class ContractService implements ContractServiceInterface {
     @Transactional
     public void deleteContract(Long id) {
         Contract contractToDelete = contractRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Contract not found with ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Contratto non trovato con ID: " + id));
 
         Player associatedPlayer = contractToDelete.getPlayer();
         if (associatedPlayer != null) {

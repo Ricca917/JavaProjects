@@ -3,7 +3,7 @@ package com.FootballTeam.footballTeam.model;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
-import java.util.Objects; // Import aggiunto per Objects.hash e Objects.equals
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -14,10 +14,10 @@ public class League {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true) // Definisco dei vincoli per la Lega/Campionato
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "country", nullable = false) // Definisco il paese che ospita la Lega/Campionato
+    @Column(name = "country", nullable = false)
     private String country;
 
     // Definisco la relazione Many to Many fra Lega e Squadre

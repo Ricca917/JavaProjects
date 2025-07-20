@@ -42,19 +42,18 @@ public class PlayerServiceTest {
 
     @BeforeEach
     void setUp() {
-        team = new Team("Team A", 1990, "President A", "Coach A");
+        team = new Team("Squadra A", 1990, "Presidente A", "Allenatore A");
         team.setId(1L);
 
-        player1 = new Player("Lionel", "Messi", LocalDate.of(1987, 6, 24), 37, "Forward", "Argentinian", 10, 800, 700, false, null, null);
+        player1 = new Player("Lionel", "Messi", LocalDate.of(1987, 6, 24), 37, "Attaccante", "Argentina", 10, 800, 700, false, null, null);
         player1.setId(1L);
         player1.setTeam(team);
 
-        player2 = new Player("Cristiano", "Ronaldo", LocalDate.of(1985, 2, 5), 39, "Forward", "Portuguese", 7, 900, 750, false, null, null);
+        player2 = new Player("Cristiano", "Ronaldo", LocalDate.of(1985, 2, 5), 39, "Attaccante", "Portoghese", 7, 900, 750, false, null, null);
         player2.setId(2L);
         player2.setTeam(team);
 
-        playerRequestDto = new PlayerRequestDto(
-                "Neymar", "Jr", "Brazilian", 32, LocalDate.of(1992, 2, 5), "Forward", 11, 400, 300, false, team.getId()
+        playerRequestDto = new PlayerRequestDto("Neymar", "Jr", "Brasil", 32, LocalDate.of(1992, 2, 5), "Attaccante", 11, 400, 300, false, team.getId()
         );
     }
 
@@ -65,11 +64,11 @@ public class PlayerServiceTest {
                 playerRequestDto.getFirstName(), playerRequestDto.getLastName(), playerRequestDto.getDateOfBirth(),
                 playerRequestDto.getAge(), playerRequestDto.getPosition(), playerRequestDto.getNationality(),
                 playerRequestDto.getJerseyNumber(), playerRequestDto.getAppearances(), playerRequestDto.getGoals(),
-                playerRequestDto.getIsFreeAgent(), null, null // Passiamo null per Team e Contract
+                playerRequestDto.getIsFreeAgent(), null, null
         );
         newPlayer.setTeam(team);
 
-        when(playerRepository.save(any(Player.class))).thenReturn(newPlayer); // Ensure the saved player has an ID
+        when(playerRepository.save(any(Player.class))).thenReturn(newPlayer);
 
         PlayerResponseDto result = playerService.createPlayer(playerRequestDto);
 
@@ -125,24 +124,24 @@ public class PlayerServiceTest {
 
     @Test
     void testUpdatePlayer_SuccessWithTeamChange() {
-        Team newTeam = new Team("Team B", 2000, "President B", "Coach B");
+        Team newTeam = new Team("Squadra B", 2000, "Presidente B", "Allenatore B");
         newTeam.setId(2L);
 
         PlayerRequestDto updateRequestDto = new PlayerRequestDto(
-                "Lionel", "Messi", "Argentinian", 37, LocalDate.of(1987, 6, 24), "Midfielder", 10, 800, 705, false, newTeam.getId()
+                "Lionel", "Messi", "Argentina", 37, LocalDate.of(1987, 6, 24), "Centrocampista", 10, 800, 705, false, newTeam.getId()
         );
 
         when(playerRepository.findById(player1.getId())).thenReturn(Optional.of(player1));
         when(teamRepository.findById(newTeam.getId())).thenReturn(Optional.of(newTeam));
-        when(playerRepository.save(any(Player.class))).thenReturn(player1); // Assume save returns the updated player1
+        when(playerRepository.save(any(Player.class))).thenReturn(player1);
 
         PlayerResponseDto result = playerService.updatePlayer(player1.getId(), updateRequestDto);
 
         assertNotNull(result);
-        assertEquals("Midfielder", result.getPosition()); // Position changed
-        assertEquals(705, result.getGoals()); // Goals changed
-        assertEquals(newTeam.getId(), result.getTeamId()); // Team changed
-        assertEquals(newTeam.getTeamName(), result.getTeamName()); // Team name updated
+        assertEquals("Centrocampista", result.getPosition());
+        assertEquals(705, result.getGoals());
+        assertEquals(newTeam.getId(), result.getTeamId());
+        assertEquals(newTeam.getTeamName(), result.getTeamName());
 
         verify(playerRepository, times(1)).findById(player1.getId());
         verify(teamRepository, times(1)).findById(newTeam.getId());
@@ -152,7 +151,7 @@ public class PlayerServiceTest {
     @Test
     void testUpdatePlayer_SuccessNoTeamChange() {
         PlayerRequestDto updateRequestDto = new PlayerRequestDto(
-                "Lionel", "Messi", "Argentinian", 37, LocalDate.of(1987, 6, 24), "Midfielder", 10, 800, 705, false, player1.getTeam().getId()
+                "Lionel", "Messi", "Argentina", 37, LocalDate.of(1987, 6, 24), "Centrocampista", 10, 800, 705, false, player1.getTeam().getId()
         );
 
         when(playerRepository.findById(player1.getId())).thenReturn(Optional.of(player1));
@@ -164,7 +163,7 @@ public class PlayerServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals("Midfielder", result.getPosition());
+        assertEquals("Centrocampista", result.getPosition());
         assertEquals(player1.getTeam().getId(), result.getTeamId());
         verify(playerRepository, times(1)).findById(player1.getId());
         verify(teamRepository, times(1)).findById(player1.getTeam().getId());
@@ -176,7 +175,7 @@ public class PlayerServiceTest {
         // Arrange
         // CORREZIONE: Ordine e tipi dei parametri per PlayerRequestDto
         PlayerRequestDto updateRequestDto = new PlayerRequestDto(
-                "Lionel", "Messi", "Argentinian", 37, LocalDate.of(1987, 6, 24), "Forward", 10, 800, 700, true, null // Set teamId to null
+                "Lionel", "Messi", "Argentina", 37, LocalDate.of(1987, 6, 24), "Attaccante", 10, 800, 700, true, null
         );
 
         when(playerRepository.findById(player1.getId())).thenReturn(Optional.of(player1));

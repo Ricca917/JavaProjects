@@ -17,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    // Metodo per l'autenticazione di un utente durante il processo di Login!
+    // Metodo per l'autenticazione di un utente durante il Login!
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
