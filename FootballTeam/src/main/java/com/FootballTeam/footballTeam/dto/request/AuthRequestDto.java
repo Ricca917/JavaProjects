@@ -13,14 +13,17 @@ public class AuthRequestDto {
     @Size(min = 8, message = "La password deve avere almeno 8 caratteri")
     private String password;
 
+    private String role;
+
     // Costruttore vuoto
     public AuthRequestDto() {
     }
 
     // Costruttore con attributi
-    public AuthRequestDto(String username, String password) {
+    public AuthRequestDto(String username, String password, String role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
     // Getter e Setter
@@ -38,5 +41,13 @@ public class AuthRequestDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -15,7 +15,7 @@ public class LeagueRequestDto {
     }
 
     // Costruttore con attributi
-    public LeagueRequestDto(String name, String country) { // Modifica il costruttore
+    public LeagueRequestDto(String name, String country) {
         this.name = name;
         this.country = country;
     }

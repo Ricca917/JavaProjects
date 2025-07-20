@@ -42,14 +42,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // Endpoint pubblici che non richiedono autenticazione (login e registrazione)
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/users").permitAll()
                         .requestMatchers("/error").permitAll()
 
-                        // Endpoint per visualizzare (GET) giocatori e squadre - Accessibili a USER e ADMIN
+                        // Endpoint per visualizzare (GET) giocatori, squadre, leghe, contratti - Accessibili a USER e ADMIN
                         .requestMatchers(HttpMethod.GET, "/api/players/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/teams/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/leagues/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/contracts/**").hasAnyRole("USER", "ADMIN")
+
+                        // Endpoint per visualizzare gli utenti - Accessibile SOLO ad ADMIN
+                        .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
 
                         // Endpoint per creazione, modifica, eliminazione - Accessibili SOLO ad ADMIN
                         .requestMatchers(HttpMethod.POST, "/api/players").hasRole("ADMIN")
