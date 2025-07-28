@@ -1,0 +1,12 @@
+LEGGIMI!!
+
+Il DB si popola in automatico quando Docker compose viene avviato, 
+altrimenti usare il file init.sql che si trova direttamente dentro la directory Football Team.
+
+La Collection di Postman esportata(come JSON) si trova direttamente dentro alla directory Football Team.
+
+Per qualsiasi domanda resto a disposizione.
+
+
+
+

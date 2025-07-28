@@ -109,5 +109,9 @@ INSERT INTO contracts (start_date, end_date, salary, provisions, player_id) VALU
 ('2022-08-01', '2026-06-30', 3500000.00, 'Clausola di rinnovo automatico.', (SELECT id FROM players WHERE first_name = 'Manuel' AND last_name = 'Locatelli')),
 ('2020-01-29', '2028-06-30', 10000000.00, 'Bonus per gol e assist, clausola rescissoria alta.', (SELECT id FROM players WHERE first_name = 'Bruno' AND last_name = 'Fernandes'));
 
+-- Inserimento di un User con ruolo ADMIN
+INSERT INTO users (username, password, role) VALUES
+('admin', 'admin123', 'ADMIN');
+
 -- Riabilita i controlli sulle chiavi esterne
 SET FOREIGN_KEY_CHECKS = 1;
