@@ -1,11 +1,11 @@
 {
 	"info": {
-		"_postman_id": "da2d200c-27f8-4483-948a-6a26a56bc777",
+		"_postman_id": "9a868f1b-56c4-420e-bbce-475db7be4e60",
 		"name": "Football_Team",
 		"description": "LEGGIMI:  \nPrima di tutto creare Giocatori e Squadre, dopo utilizzare i propri ID (teamId & playerId) per fare le richieste specifiche.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "43529590",
-		"_collection_link": "https://riccardobianchi.postman.co/workspace/Lezione-ITS~080db3c1-2e6a-46c3-a65a-ee901ba6b1f3/collection/43529590-da2d200c-27f8-4483-948a-6a26a56bc777?action=share&source=collection_link&creator=43529590"
+		"_collection_link": "https://riccardobianchi.postman.co/workspace/Lezione-ITS~080db3c1-2e6a-46c3-a65a-ee901ba6b1f3/collection/43529590-9a868f1b-56c4-420e-bbce-475db7be4e60?action=share&source=collection_link&creator=43529590"
 	},
 	"item": [
 		{
@@ -138,7 +138,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/users/4",
+							"raw": "http://localhost:8080/api/users/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -147,7 +147,7 @@
 							"path": [
 								"api",
 								"users",
-								"4"
+								"1"
 							]
 						}
 					},
@@ -184,7 +184,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/users/4",
+							"raw": "http://localhost:8080/api/users/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -193,7 +193,7 @@
 							"path": [
 								"api",
 								"users",
-								"4"
+								"1"
 							]
 						}
 					},
@@ -221,7 +221,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/users/4",
+							"raw": "http://localhost:8080/api/users/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -230,7 +230,7 @@
 							"path": [
 								"api",
 								"users",
-								"4"
+								"1"
 							]
 						}
 					},
@@ -381,7 +381,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/players/8",
+							"raw": "http://localhost:8080/api/players/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -390,7 +390,7 @@
 							"path": [
 								"api",
 								"players",
-								"8"
+								"1"
 							]
 						}
 					},
@@ -501,7 +501,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/players/8",
+							"raw": "http://localhost:8080/api/players/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -510,7 +510,7 @@
 							"path": [
 								"api",
 								"players",
-								"8"
+								"1"
 							]
 						}
 					},
@@ -538,7 +538,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/teams/{teamId}/players/{playerId}",
+							"raw": "http://localhost:8080/api/teams/1/players/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -547,9 +547,9 @@
 							"path": [
 								"api",
 								"teams",
-								"{teamId}",
+								"1",
 								"players",
-								"{playerId}"
+								"1"
 							]
 						}
 					},
@@ -586,7 +586,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/teams/{teamid}/players",
+							"raw": "http://localhost:8080/api/teams/1/players",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -595,7 +595,7 @@
 							"path": [
 								"api",
 								"teams",
-								"{teamid}",
+								"1",
 								"players"
 							]
 						}
@@ -624,7 +624,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/teams/{teamId}/players/{playerId}",
+							"raw": "http://localhost:8080/api/teams/1/players/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -633,9 +633,9 @@
 							"path": [
 								"api",
 								"teams",
-								"{teamId}",
+								"1",
 								"players",
-								"{playerId}"
+								"1"
 							]
 						}
 					},
@@ -663,7 +663,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/players/8",
+							"raw": "http://localhost:8080/api/players/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -672,7 +672,7 @@
 							"path": [
 								"api",
 								"players",
-								"8"
+								"1"
 							]
 						}
 					},
@@ -1023,7 +1023,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/leagues/3",
+							"raw": "http://localhost:8080/api/leagues/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1032,7 +1032,7 @@
 							"path": [
 								"api",
 								"leagues",
-								"3"
+								"1"
 							]
 						}
 					},

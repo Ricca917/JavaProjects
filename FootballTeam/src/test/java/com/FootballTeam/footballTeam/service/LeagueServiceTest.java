@@ -143,7 +143,7 @@ class LeagueServiceTest {
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
             leagueService.updateLeague(nonExistentId, requestDto);
         });
-        assertTrue(thrown.getMessage().contains("Campionato/Coppa non trovata con ID: " + nonExistentId));
+        assertTrue(thrown.getMessage().contains("Campionato/Coppa non trovato con ID: " + nonExistentId));
 
         verify(leagueRepository, times(1)).findById(nonExistentId);
         verify(leagueRepository, never()).save(any(League.class));
@@ -168,7 +168,7 @@ class LeagueServiceTest {
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
             leagueService.deleteLeague(nonExistentId);
         });
-        assertTrue(thrown.getMessage().contains("Campionato/Coppa non trovata con ID: " + nonExistentId));
+        assertTrue(thrown.getMessage().contains("Campionato/Coppa non trovato con ID: " + nonExistentId));
 
         verify(leagueRepository, times(1)).existsById(nonExistentId);
         verify(leagueRepository, never()).deleteById(anyLong());

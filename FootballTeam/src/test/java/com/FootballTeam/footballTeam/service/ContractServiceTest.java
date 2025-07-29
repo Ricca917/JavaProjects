@@ -114,7 +114,7 @@ class ContractServiceTest {
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
             contractService.createContract(requestDto);
         });
-        assertTrue(thrown.getMessage().contains("Giocatore non trovato con ID: " + requestDto.getPlayerId()));
+        assertTrue(thrown.getMessage().contains("Player not found with ID: " + requestDto.getPlayerId()));
 
         verify(playerRepository, times(1)).findById(requestDto.getPlayerId());
         verify(contractRepository, never()).save(any(Contract.class));
@@ -135,7 +135,7 @@ class ContractServiceTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             contractService.createContract(requestDto);
         });
-        assertTrue(thrown.getMessage().contains("Giocatore con ID: " + player.getId() + " ha già un contratto attivo."));
+        assertTrue(thrown.getMessage().contains("Player with ID: " + player.getId() + " already has an active contract."));
 
         verify(playerRepository, times(1)).findById(player.getId());
         verify(contractRepository, never()).save(any(Contract.class));

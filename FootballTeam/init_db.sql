@@ -111,7 +111,7 @@ INSERT INTO contracts (start_date, end_date, salary, provisions, player_id) VALU
 
 -- Inserimento di un User con ruolo ADMIN
 INSERT INTO users (username, password, role) VALUES
-('admin', 'admin123', 'ADMIN');
+('admin', '$2a$10$iVG8TT0lgCVxiMiIIjIAHe3OYN9X8LtnA3mCxfCUKlgsvI2iLHHOa', 'ADMIN');
 
 -- Riabilita i controlli sulle chiavi esterne
 SET FOREIGN_KEY_CHECKS = 1;
